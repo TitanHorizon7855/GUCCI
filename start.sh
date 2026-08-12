@@ -84,6 +84,26 @@ if [ -f "$DB" ]; then
 fi
 
 # ---------------------------------------------------------------------
+# 🎛️  GUCCI Traffic Ratio — ضریب مصرف ترافیک کاربران
+#
+#  نحوه استفاده: در فرم ویرایش کاربر، فیلد Comment → «ضریب:2» یا «ratio=0.5»
+#  داشبورد زنده: https://دامنه/ratio/ (ورود با RATIO_USER / RATIO_PASS)
+#  متغیرها:
+#    RATIO_USER      یوزر داشبورد      (پیش‌فرض: gucci)
+#    RATIO_PASS      رمز داشبورد       (پیش‌فرض: gucci — حتماً عوض کن!)
+#    RATIO_INTERVAL  بازه اعمال ضریب   (پیش‌فرض: 45 ثانیه)
+# ---------------------------------------------------------------------
+RATIO_USER="${RATIO_USER:-gucci}"
+RATIO_PASS="${RATIO_PASS:-gucci}"
+mkdir -p /var/www/ratio
+printf '%s:%s\n' "$RATIO_USER" "$(openssl passwd -apr1 "$RATIO_PASS")" > /etc/nginx/.htpasswd_ratio
+if [ "$RATIO_PASS" = "gucci" ]; then
+    echo "⚠️  RATIO_PASS تنظیم نشده — داشبورد /ratio/ با رمز پیش‌فرض gucci باز می‌شود!"
+fi
+echo "🎛️  starting traffic-ratio daemon (every ${RATIO_INTERVAL:-45}s, dashboard at /ratio/)..."
+nohup /usr/local/gucci/gucci-multiplier.sh >> /var/log/x-ui/ratio.log 2>&1 &
+
+# ---------------------------------------------------------------------
 # تولید کانفیگ nginx (داینامیک)
 # ---------------------------------------------------------------------
 GEN_DIR=$(mktemp -d)

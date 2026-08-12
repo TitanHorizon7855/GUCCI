@@ -14,6 +14,7 @@ RUN apk add --no-cache \
     nginx \
     gettext \
     openssl \
+    jq \
     && ln -sf /usr/share/zoneinfo/Asia/Tehran /etc/localtime
 
 # دانلود و نصب 3x-ui (سنایی)
@@ -27,6 +28,11 @@ RUN mkdir -p /etc/x-ui /var/log/x-ui
 COPY nginx.conf.template /etc/nginx/nginx.conf.template
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
+
+# GUCCI Traffic Ratio daemon (ضریب مصرف)
+RUN mkdir -p /usr/local/gucci /var/www/ratio
+COPY gucci-multiplier.sh /usr/local/gucci/gucci-multiplier.sh
+RUN chmod +x /usr/local/gucci/gucci-multiplier.sh
 
 # Railway پورت رو از طریق متغیر $PORT تزریق می‌کند؛ nginx روی پورت 1 گوش می‌دهد
 CMD ["/start.sh"]

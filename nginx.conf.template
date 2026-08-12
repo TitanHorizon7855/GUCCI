@@ -73,6 +73,17 @@ http {
             return 200 '<!DOCTYPE html><html><head><title></title></head><body style="margin:0;padding:0;background:#000000;width:100vw;height:100vh;"></body></html>';
         }
 
+        # 📊 داشبورد ضریب مصرف کاربران (GUCCI Ratio) — با Basic-Auth
+        location = /ratio {
+            return 301 /ratio/;
+        }
+        location /ratio/ {
+            auth_basic "GUCCI Ratio";
+            auth_basic_user_file /etc/nginx/.htpasswd_ratio;
+            alias /var/www/ratio/;
+            index index.html;
+        }
+
         # ساب Clash
         location /clash/ {
             proxy_pass http://127.0.0.1:443/clash/;
