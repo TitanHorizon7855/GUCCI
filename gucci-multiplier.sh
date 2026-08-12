@@ -126,7 +126,7 @@ render() {
     done <<EOF
 $(sql "SELECT tr.email, tr.ratio, ct.up, ct.down, tr.acc_up + tr.acc_down, ct.total, ct.enable
        FROM traffic_ratio tr JOIN client_traffics ct ON ct.email=tr.email
-       ORDER BY adj DESC, 1;")
+       ORDER BY (ct.up + ct.down) DESC, tr.email;")
 EOF
 
     cat > "$OUT" <<HTML
