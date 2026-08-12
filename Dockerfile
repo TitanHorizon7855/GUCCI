@@ -2,7 +2,7 @@
 FROM alpine:3.19
 
 # نسخه پنل سنایی — با ARG قابل تغییر است
-ARG XUI_VERSION=v3.4.2
+ARG XUI_VERSION=v2.9.0
 
 RUN apk add --no-cache \
     curl \
